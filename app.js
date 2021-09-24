@@ -1,35 +1,27 @@
-//TODO Pass the 2 functions to modules 
-//TODO Dockerize!
-
-// const {puppeteerScraper} = require('./bussinesLogic/puppeteer')
-
-// async function main(){
-// const config = {
-//     pageUrl: 'https://www.carnival.com/cruise-ships.aspx', 
-//     optionWaitUntil: 'networkidle0',
-//     evaluationParams: 'div.activity-result.ship-result ul',
-//     evaluateId: 'shipInfo'
-// }
-// let a = await puppeteerScraper(config)
-//  console.log(a);
-// }
-
-// main();
-
 const puppeteer = require('puppeteer');
 const {merger} = require('./utils/filters');
 const fs = require('fs');
+const {config} = require('./config');
 
 (async () => {
-  const browser = await puppeteer.launch();
-  
-  const page = await browser.newPage();
-  await page.goto(  'https://www.carnival.com/cruise-ships.aspx',
-                    {
-                        waitUntil: 'networkidle0' 
-                    }
-  );
+    const browser = await puppeteer.launch({
+        headless:false
+    });
+    const page = await browser.newPage();
+    await page.setDefaultNavigationTimeout(0)
+    process.on('unhandledRejection', (reason, p) => {
+        console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
+        browser.close();
+      });
 
+      await page.goto(  config.URL,
+                    {
+                        waitUntil: config.waitUntilOption,
+                        timeout: 0                     
+                    }
+    );
+    
+    
     let infoList = await page.evaluate(()=>{
     const records = [];
     // eslint-disable-next-line no-undef
@@ -51,7 +43,7 @@ const fs = require('fs');
         return a;
     })
     let a = merger(titleList,infoList);
-    fs.writeFile ("input.json", JSON.stringify(a), function(err) {
+    fs.writeFile ("./out/output.json", JSON.stringify(a), function(err) {
         if (err) throw err;
         console.log('complete');
         }

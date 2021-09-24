@@ -1,4 +1,4 @@
-function shipInfo(shipList){
+/*function shipInfo(shipList){
     const shipListArr = Array.from(shipList);
     const records = [];
     
@@ -11,7 +11,7 @@ function shipInfo(shipList){
         records.push(record);
     })
     return records;
-};
+};*/
 // function shipInfo(document){
 //     const shipList = document.querySelectorAll('div.activity-result.ship-result ul');
 //     const shipListArr = Array.from(shipList);
@@ -28,14 +28,13 @@ function shipInfo(shipList){
 //     return records;
 // };
 
-function shipTitle(){
+//function shipTitle(){
     // eslint-disable-next-line no-undef
-    let a = Array.from(document.querySelectorAll('h2.ccl-dsk > a')).map(e=> e.innerText.trim());
-    return a;    
-}
+//    let a = Array.from(document.querySelectorAll('h2.ccl-dsk > a')).map(e=> e.innerText.trim());
+//    return a;    
+//}
 
 function merger(title,list){
-    console.log(list.length)
     let mergedJson = [];
     title.forEach ((e,index)=>{
         let sailTo = list[index]["Sail To"].split(", ").map(s=> s.trim())
@@ -61,6 +60,6 @@ function merger(title,list){
     return mergedJson;
 }
 
-module.exports = {shipInfo,shipTitle,merger};
+module.exports = {merger};
 
 
